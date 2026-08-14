@@ -3,13 +3,12 @@ import dotenv from 'dotenv';
 const environment = process.env.ENV || 'qa';
 
 dotenv.config({
-  path: `.env.${environment}`
+  path: `.env.${environment}`,
+  override: false
 });
 
-const prefix = environment.toUpperCase();
-
 export const env = {
-  baseURL: process.env[`${prefix}_BASE_URL`]!,
-  username: process.env[`${prefix}_USERNAME`]!,
-  password: process.env[`${prefix}_PASSWORD`]!
+  baseURL: process.env.BASE_URL,
+  username: process.env.USERNAME,
+  password: process.env.PASSWORD
 };
