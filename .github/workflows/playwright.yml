@@ -1,0 +1,93 @@
+name: Playwright Automation Test
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+  schedule:
+    - cron: '30 18 * * *'   # 12:00 AM IST daily
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select Environment'
+        required: true
+        default: 'qa'
+        type: choice
+        options:
+          - dev
+          - qa
+
+jobs:
+
+  test:
+
+    runs-on: ubuntu-latest
+
+    env:
+      ENV: ${{ github.event.inputs.environment || 'qa' }}
+
+    steps:
+
+      # Get project code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+
+      # Install Node.js
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+
+      # Install npm packages
+      - name: Install Dependencies
+        run: npm ci
+
+
+      # Install Playwright browsers
+      - name: Install Playwright Browsers
+        run: npx --no-install playwright install --with-deps
+
+
+      # Show selected environment
+      - name: Show Environment
+        run: echo "Running tests on $ENV environment"
+
+
+      # Start application server
+      - name: Start Application Server
+        run: npm run start > app.log 2>&1 &
+
+
+      # Check application startup log
+      - name: Check Application Log
+        run: |
+          sleep 10
+          cat app.log
+
+
+      # Wait until application is ready
+      - name: Wait for Application
+        run: npx wait-on http://localhost:8888 --timeout 60000
+
+
+      # Execute Playwright tests
+      - name: Run Playwright Tests
+        run: npx playwright test
+
+
+      # Upload Playwright HTML Report
+      - name: Upload Playwright Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
