@@ -6,8 +6,10 @@ dotenv.config({
   path: `.env.${environment}`
 });
 
+const prefix = environment.toUpperCase();
+
 export const env = {
-  baseURL: process.env.BASE_URL!,
-  username: process.env.USERNAME!,
-  password: process.env.PASSWORD!
+  baseURL: process.env[`${prefix}_BASE_URL`]!,
+  username: process.env[`${prefix}_USERNAME`]!,
+  password: process.env[`${prefix}_PASSWORD`]!
 };
