@@ -148,12 +148,12 @@ jobs:
 
 
       # # Upload Allure Report as Artifact
-      # - name: Upload Allure Report
-      #   if: always()
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: allure-report
-      #     path: playwright-report/allure-report/
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: playwright-report/allure-report/
 
 
       # Upload Test Results
