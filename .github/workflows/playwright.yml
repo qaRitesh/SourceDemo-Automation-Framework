@@ -31,6 +31,9 @@ jobs:
 
     env:
       ENV: ${{ github.event.inputs.environment || 'qa' }}
+      BASE_URL: ${{ github.event.inputs.environment == 'dev' && secrets.DEV_BASE_URL || secrets.QA_BASE_URL }}
+      USERNAME: ${{ github.event.inputs.environment == 'dev' && secrets.DEV_USERNAME || secrets.QA_USERNAME }}
+      PASSWORD: ${{ github.event.inputs.environment == 'dev' && secrets.DEV_PASSWORD || secrets.QA_PASSWORD }}
 
     steps:
 
