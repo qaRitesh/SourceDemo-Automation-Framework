@@ -17,3 +17,8 @@ async function globalSetup(_config: FullConfig): Promise<void> {
 }
 
 export default globalSetup;
+
+
+
+
+//npx cross-env ENV=dev playwright test --grep "@regression"

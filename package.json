@@ -7,8 +7,10 @@
     "test": "npx playwright test",
     "test:headed": "playwright test --headed",
     "test:report": "playwright test --reporter=html",
+    "allure:clean": "powershell -Command \"Remove-Item -Recurse -Force allure-results -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force playwright-report/allure-report -ErrorAction SilentlyContinue\"",
      "allure:generate": "allure generate allure-results --clean -o playwright-report/allure-report",
      "allure:open": "allure open playwright-report/allure-report",
+      "test:allure": "npm run allure:clean && npm run test && npm run allure:generate && npm run allure:open",
      "allure:report": "npm run allure:generate",
 
     "test:dev": "cross-env ENV=dev playwright test",
