@@ -1,0 +1,32 @@
+{
+  "name": "demoproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "playwright test --headed",
+    "test:report": "playwright test --reporter=html",
+     "allure:generate": "allure generate allure-results --clean -o playwright-report/allure-report",
+    "allure:open": "allure open playwright-report/allure-report",
+    "allure:report": "npm run allure:generate",
+
+    "test:dev": "cross-env ENV=dev playwright test",
+    "test:qa": "cross-env ENV=qa playwright test",
+    "test:regression": "cross-env ENV=dev playwright test --grep \"@regression\"",
+    "test:smoke": "cross-env ENV=dev playwright test --grep \"@smoke\""
+   
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.2.0",
+    "allure-playwright": "^3.10.2",
+    "cross-env": "^10.1.0",
+    "dotenv": "^17.4.2",
+    "typescript": "^7.0.2"
+  }
+}
