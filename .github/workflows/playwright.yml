@@ -10,7 +10,7 @@ on:
       - main
 
   schedule:
-    - cron: '30 18 * * *'   # 12:00 AM IST daily
+    - cron: '30 18 * * 0'   # Monday 12:00 AM IST
 
   workflow_dispatch:
     inputs:
@@ -38,7 +38,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-
       # Install Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -46,26 +45,21 @@ jobs:
           node-version: 22
           cache: npm
 
-
       # Install npm packages
       - name: Install Dependencies
         run: npm ci
-
 
       # Install Playwright browsers
       - name: Install Playwright Browsers
         run: npx --no-install playwright install --with-deps
 
-
       # Show selected environment
       - name: Show Environment
         run: echo "Running tests on $ENV environment"
 
-
       # Start application server
       - name: Start Application Server
         run: npm run start > app.log 2>&1 &
-
 
       # Check application startup log
       - name: Check Application Log
@@ -73,16 +67,13 @@ jobs:
           sleep 10
           cat app.log
 
-
-      # Wait until application is ready
+      # Wait until selected environment is ready
       - name: Wait for Application
-        run: npx wait-on http://localhost:8888 --timeout 60000
-
+        run: npx wait-on "$BASE_URL" --timeout 60000
 
       # Execute Playwright tests
       - name: Run Playwright Tests
         run: npx playwright test
-
 
       # Upload Playwright HTML Report
       - name: Upload Playwright Report
