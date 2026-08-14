@@ -1,4 +1,4 @@
-name: Playwright Automation Test
+name: SourceDemo Automation Test
 
 on:
   push:
@@ -23,6 +23,15 @@ on:
           - dev
           - qa
 
+      test_suite:
+        description: 'Select Test Suite'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+          - smoke
+          - regression
+
 jobs:
 
   test:
@@ -31,8 +40,12 @@ jobs:
 
     env:
       ENV: ${{ github.event.inputs.environment || 'qa' }}
+      TEST_SUITE: ${{ github.event.inputs.test_suite || 'regression' }}
+
       BASE_URL: ${{ github.event.inputs.environment == 'dev' && secrets.DEV_BASE_URL || secrets.QA_BASE_URL }}
+
       USERNAME: ${{ github.event.inputs.environment == 'dev' && secrets.DEV_USERNAME || secrets.QA_USERNAME }}
+
       PASSWORD: ${{ github.event.inputs.environment == 'dev' && secrets.DEV_PASSWORD || secrets.QA_PASSWORD }}
 
     steps:
@@ -58,7 +71,9 @@ jobs:
 
       # Show selected environment
       - name: Show Environment
-        run: echo "Running tests on $ENV environment"
+        run: |
+          echo "Environment: $ENV"
+          echo "Test Suite: $TEST_SUITE"
 
       # Start application server
       - name: Start Application Server
@@ -76,7 +91,12 @@ jobs:
 
       # Execute Playwright tests
       - name: Run Playwright Tests
-        run: npx playwright test
+        run: |
+          if [ "$TEST_SUITE" = "smoke" ]; then
+            npx playwright test --grep @smoke
+          else
+            npx playwright test --grep @regression
+          fi
 
       # Upload Playwright HTML Report
       - name: Upload Playwright Report
