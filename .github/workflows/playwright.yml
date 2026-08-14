@@ -111,6 +111,12 @@ jobs:
         run: |
           npx allure-commandline generate ./allure-results --clean -o ./allure-report
 
+      - name: Check Allure Results  
+        if: always()
+        run: |
+          echo "Checking allure-results..."
+            ls -la allure-results || true
+
       # Upload Playwright HTML Report
       - name: Upload Playwright HTML Report
         if: always()

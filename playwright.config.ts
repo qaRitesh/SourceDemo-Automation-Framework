@@ -12,7 +12,7 @@ export default defineConfig({
   reporter: [
     ['list'],
     ['html', { outputFolder: 'playwright-report/html', open: 'never' }],
-    ['allure-playwright', { outputFolder: 'allure-results' }],
+    ['allure-playwright', { resultsDir: 'allure-results' }],
   ],
   outputDir: 'test-results',
   globalSetup: require.resolve('./baseClass/auth.setup.ts'),
